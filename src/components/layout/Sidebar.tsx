@@ -9,7 +9,8 @@ import {
   BarChart3, 
   Settings,
   ChevronLeft, 
-  ChevronRight 
+  ChevronRight,
+  LineChart
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -19,6 +20,7 @@ const navItems = [
   { name: 'Đơn hàng', path: '/orders', icon: <ShoppingBag className="h-5 w-5" /> },
   { name: 'Người dùng', path: '/users', icon: <Users className="h-5 w-5" /> },
   { name: 'Báo cáo', path: '/reports', icon: <BarChart3 className="h-5 w-5" /> },
+  { name: 'Thống kê', path: '/statistics', icon: <LineChart className="h-5 w-5" /> },
   { name: 'Cài đặt', path: '/settings', icon: <Settings className="h-5 w-5" /> },
 ];
 
