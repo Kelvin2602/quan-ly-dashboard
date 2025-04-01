@@ -7,8 +7,10 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon, Search } from 'lucide-react';
+import { CalendarIcon, Download, Search } from 'lucide-react';
 import { format } from 'date-fns';
+import { useToast } from '@/hooks/use-toast';
+import * as XLSX from 'xlsx';
 
 // Sample data for demonstration
 const orderHistoryData = [
@@ -26,6 +28,7 @@ export default function OrderHistoryStats() {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const { toast } = useToast();
 
   // Filter orders based on search query and status filter
   const filteredOrders = orderHistoryData.filter(order => {
@@ -37,6 +40,36 @@ export default function OrderHistoryStats() {
     
     return matchesSearch && matchesStatus;
   });
+
+  // Function to export data to Excel
+  const exportToExcel = () => {
+    // Create a worksheet
+    const worksheet = XLSX.utils.json_to_sheet(filteredOrders);
+    
+    // Create a workbook
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Lịch sử đơn hàng');
+    
+    // Generate Excel file and trigger download
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    
+    // Create a download link and trigger click
+    const fileName = `lich-su-don-hang-${new Date().toISOString().split('T')[0]}.xlsx`;
+    
+    // Use FileSaver or similar approach
+    const url = window.URL.createObjectURL(data);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    link.click();
+    
+    // Show success notification
+    toast({
+      title: "Xuất báo cáo thành công",
+      description: `Đã xuất ${filteredOrders.length} đơn hàng ra file Excel.`,
+    });
+  };
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -88,7 +121,10 @@ export default function OrderHistoryStats() {
               </Popover>
             </div>
             
-            <Button>Xuất báo cáo</Button>
+            <Button onClick={exportToExcel}>
+              <Download className="mr-2 h-4 w-4" />
+              Xuất báo cáo Excel
+            </Button>
           </div>
           
           <div className="rounded-md border">
