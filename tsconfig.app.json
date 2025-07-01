@@ -11,6 +11,8 @@
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "noEmit": true,
     "jsx": "react-jsx",
 
@@ -24,7 +26,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["react", "react-dom", "vite/client"]
   },
   "include": ["src"]
 }
