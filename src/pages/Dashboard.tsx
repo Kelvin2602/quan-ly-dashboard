@@ -1,4 +1,3 @@
-/** @jsxImportSource react */
 import React from 'react';
 import MainLayout from '@/components/layout/MainLayout';
 import StatsCard from '@/components/dashboard/StatsCard';

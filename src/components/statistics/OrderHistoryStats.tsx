@@ -9,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { CalendarIcon, Download, Search } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
-import * as XLSX from 'xlsx';
+import XLSX from 'xlsx';
 
 // Sample data for demonstration
 const orderHistoryData = [

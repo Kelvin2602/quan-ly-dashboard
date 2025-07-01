@@ -27,7 +27,8 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "types": ["react", "react-dom", "vite/client"]
+    "types": ["react", "react-dom", "vite/client"],
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "include": ["src"]
 }
