@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   DialogContent,
@@ -32,11 +31,29 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // ----- Data sanitisation -----
+    // 1. Remove every non-digit character from the price string so we never
+    //    end up with duplicated currency symbols or stray spaces/comma.
+    const numericPrice = price.replace(/[^0-9]/g, "");
+    // Fallback to 0 when the input is empty after stripping characters.
+    const priceNumber = numericPrice ? Number(numericPrice) : 0;
+
+    // Format price nicely with thousand separators and append the currency.
+    const formattedPrice = `${priceNumber.toLocaleString()} đ`;
+
+    // 2. Stock: make sure we store a non-negative integer. `Number` handles
+    //    empty strings as 0, parseInt returns NaN – so we normalise through
+    //    `Number`, then clamp to 0.
+    let stockNumber = Number(stock);
+    if (Number.isNaN(stockNumber) || stockNumber < 0) {
+      stockNumber = 0;
+    }
+
     onSave({
       name,
-      price: `${price} đ`,
+      price: formattedPrice,
       category,
-      stock: parseInt(stock),
+      stock: stockNumber,
       description,
     });
   };

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -57,12 +56,16 @@ export default function OrderHistoryStats() {
     // Create a download link and trigger click
     const fileName = `lich-su-don-hang-${new Date().toISOString().split('T')[0]}.xlsx`;
     
-    // Use FileSaver or similar approach
     const url = window.URL.createObjectURL(data);
     const link = document.createElement('a');
     link.href = url;
     link.download = fileName;
+    document.body.appendChild(link);
     link.click();
+    // Clean-up: revoke the object URL & remove the temporary link element to
+    // avoid accumulating detached DOM nodes and in-memory blobs on every export.
+    window.URL.revokeObjectURL(url);
+    link.remove();
     
     // Show success notification
     toast({

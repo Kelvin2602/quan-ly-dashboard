@@ -171,15 +171,21 @@ function toast({ ...props }: Toast) {
 function useToast() {
   const [state, setState] = React.useState<State>(memoryState)
 
+  // Register the component state updater **once** and clean up on un-mount.
+  // Using an empty dependency array prevents the effect from re-running on
+  // every state change, which previously caused an avoidable push / splice
+  // cycle in the `listeners` array for each toast update.
   React.useEffect(() => {
     listeners.push(setState)
+
     return () => {
       const index = listeners.indexOf(setState)
       if (index > -1) {
         listeners.splice(index, 1)
       }
     }
-  }, [state])
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- we want this to run only once
+  }, [])
 
   return {
     ...state,
